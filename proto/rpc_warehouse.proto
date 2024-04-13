@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "gprc/proto";
+
+// Warehouse
+message InsertWarehouseReq {
+    string productId = 1;
+}
+message InsertWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+
+message UpdateWarehouseReq {
+    uint64 id = 1;
+    uint64 count = 2;
+}
+message UpdateWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+
+message UpCountWarehouseReq {
+    uint64 id = 1;
+}
+message UpCountWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+
+message DownCountWarehouseReq {
+    uint64 id = 1;
+}
+message DownCountWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+
+service WarehouseService {
+    rpc Insert(InsertWarehouseReq) returns (InsertWarehouseRes) {}
+    rpc Update(UpdateWarehouseReq) returns (UpdateWarehouseRes) {}
+    rpc UpCount(UpCountWarehouseReq) returns (UpCountWarehouseRes) {}
+    rpc DownCount(DownCountWarehouseReq) returns (DownCountWarehouseRes) {}
+}
+
+
+// Type Warehouse
+message InsertTypeInWarehouseReq {
+    string productId = 1;
+}
+message InsertTypeInWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+  
+message UpdateTypeInWarehouseReq {
+    uint64 id = 1;
+    uint64 count = 2;
+}
+message UpdateTypeInWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+  
+message UpCountTypeInWarehouseReq {
+    uint64 id = 1;
+}
+message UpCountTypeInWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+  
+message DownCountTypeInWarehouseReq {
+    uint64 id = 1;
+}
+message DownCountTypeInWarehouseRes {
+    uint64 id = 1;
+    string productId = 2;
+    uint64 count = 3;
+}
+
+service TypeWarehouseService {
+    rpc Insert(InsertTypeInWarehouseReq) returns (InsertTypeInWarehouseRes) {}
+    rpc Update(UpdateTypeInWarehouseReq) returns (UpdateTypeInWarehouseRes) {}
+    rpc UpCount(UpCountTypeInWarehouseReq) returns (UpCountTypeInWarehouseRes) {}
+    rpc DownCount(DownCountTypeInWarehouseReq) returns (DownCountTypeInWarehouseRes) {}
+}

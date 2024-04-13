@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "grpc/proto";
+
+message InsertFileReq {
+  string productId = 1;
+  string typeModel = 2;
+  string name = 3;
+  string format = 4;
+  bytes data = 5;
+}
+message InsertFileRes {
+  uint64 id = 1;
+  string productId = 2;
+  string typeModel = 3;
+  repeated uint64 fileIds = 4;
+}
+
+message DeleteFileReq {
+    repeated uint64 ids = 1;
+}
+message DeleteFileRes {
+    string mess = 1;
+}
+
+message GetFileIdsWithProductIdReq {
+    string productId = 1;
+}
+message GetFileIdsWithProductIdRes {
+    repeated uint64 ids = 1;
+}
+
+service FileService {
+  rpc InsertFile(stream InsertFileReq) returns (InsertFileRes) {}
+  rpc DeleteFile(DeleteFileReq) returns (DeleteFileRes) {}
+  rpc GetFileIdsWithProductId(GetFileIdsWithProductIdReq) returns (GetFileIdsWithProductIdRes) {}
+}

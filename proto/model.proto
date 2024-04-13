@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "grpc/proto";
+
+message User {
+    uint64 iD = 1;
+    uint64 roleID = 2;  
+	string username = 3;
+	string password = 4;
+	string email = 5;
+  
+    Role role = 6;
+
+	int64 createdAt = 7;
+	int64 updatedAt = 8;
+	int64 deletedAt = 9;
+}
+
+message Role {
+    uint64 iD = 1;
+    string code = 2;
+	string name = 3;
+
+    repeated User users = 4;
+
+	int64 createdAt = 5;
+	int64 updatedAt = 6;
+	int64 deletedAt = 7;
+}
+
+message Profile {
+    uint64 iD = 1;
+    uint64 userID = 2;
+	string firstname = 3;
+	string lastname = 4;
+	string name = 5;
+	string address = 6;
+	string gender = 7;
+	int64 birth = 8;
+	string phone = 9;
+	string email = 10;
+	string picture = 11;
+	string sub = 12;
+
+	User user = 13;
+
+	int64 createdAt = 14;
+	int64 updatedAt = 15;
+	int64 deletedAt = 16;
+}
+
+message Shop {
+    uint64 iD = 1;
+    uint64 profileID = 2;
+    string name = 3;
+    string address = 4;
+
+    repeated TypeProduct typeProducts = 5;
+
+    int64 createdAt = 6;
+	int64 updatedAt = 7;
+	int64 deletedAt = 8;
+}
+
+message TypeProduct {
+    uint64 iD = 1;
+    uint64 shopID = 2;
+    string hastag = 3;
+    string name = 4;
+
+    Shop shop = 5;
+
+    int64 createdAt = 6;
+	int64 updatedAt = 7;
+	int64 deletedAt = 8;
+}
