@@ -220,200 +220,201 @@ var WarehouseService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	TypeWarehouseService_Insert_FullMethodName    = "/proto.TypeWarehouseService/Insert"
-	TypeWarehouseService_Update_FullMethodName    = "/proto.TypeWarehouseService/Update"
-	TypeWarehouseService_UpCount_FullMethodName   = "/proto.TypeWarehouseService/UpCount"
-	TypeWarehouseService_DownCount_FullMethodName = "/proto.TypeWarehouseService/DownCount"
+	TypeInWarehouseService_Insert_FullMethodName    = "/proto.TypeInWarehouseService/Insert"
+	TypeInWarehouseService_Update_FullMethodName    = "/proto.TypeInWarehouseService/Update"
+	TypeInWarehouseService_UpCount_FullMethodName   = "/proto.TypeInWarehouseService/UpCount"
+	TypeInWarehouseService_DownCount_FullMethodName = "/proto.TypeInWarehouseService/DownCount"
 )
 
-// TypeWarehouseServiceClient is the client API for TypeWarehouseService service.
+// TypeInWarehouseServiceClient is the client API for TypeInWarehouseService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TypeWarehouseServiceClient interface {
+type TypeInWarehouseServiceClient interface {
 	Insert(ctx context.Context, in *InsertTypeInWarehouseReq, opts ...grpc.CallOption) (*InsertTypeInWarehouseRes, error)
 	Update(ctx context.Context, in *UpdateTypeInWarehouseReq, opts ...grpc.CallOption) (*UpdateTypeInWarehouseRes, error)
 	UpCount(ctx context.Context, in *UpCountTypeInWarehouseReq, opts ...grpc.CallOption) (*UpCountTypeInWarehouseRes, error)
 	DownCount(ctx context.Context, in *DownCountTypeInWarehouseReq, opts ...grpc.CallOption) (*DownCountTypeInWarehouseRes, error)
 }
 
-type typeWarehouseServiceClient struct {
+type typeInWarehouseServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTypeWarehouseServiceClient(cc grpc.ClientConnInterface) TypeWarehouseServiceClient {
-	return &typeWarehouseServiceClient{cc}
+func NewTypeInWarehouseServiceClient(cc grpc.ClientConnInterface) TypeInWarehouseServiceClient {
+	return &typeInWarehouseServiceClient{cc}
 }
 
-func (c *typeWarehouseServiceClient) Insert(ctx context.Context, in *InsertTypeInWarehouseReq, opts ...grpc.CallOption) (*InsertTypeInWarehouseRes, error) {
+func (c *typeInWarehouseServiceClient) Insert(ctx context.Context, in *InsertTypeInWarehouseReq, opts ...grpc.CallOption) (*InsertTypeInWarehouseRes, error) {
 	out := new(InsertTypeInWarehouseRes)
-	err := c.cc.Invoke(ctx, TypeWarehouseService_Insert_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TypeInWarehouseService_Insert_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *typeWarehouseServiceClient) Update(ctx context.Context, in *UpdateTypeInWarehouseReq, opts ...grpc.CallOption) (*UpdateTypeInWarehouseRes, error) {
+func (c *typeInWarehouseServiceClient) Update(ctx context.Context, in *UpdateTypeInWarehouseReq, opts ...grpc.CallOption) (*UpdateTypeInWarehouseRes, error) {
 	out := new(UpdateTypeInWarehouseRes)
-	err := c.cc.Invoke(ctx, TypeWarehouseService_Update_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TypeInWarehouseService_Update_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *typeWarehouseServiceClient) UpCount(ctx context.Context, in *UpCountTypeInWarehouseReq, opts ...grpc.CallOption) (*UpCountTypeInWarehouseRes, error) {
+func (c *typeInWarehouseServiceClient) UpCount(ctx context.Context, in *UpCountTypeInWarehouseReq, opts ...grpc.CallOption) (*UpCountTypeInWarehouseRes, error) {
 	out := new(UpCountTypeInWarehouseRes)
-	err := c.cc.Invoke(ctx, TypeWarehouseService_UpCount_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TypeInWarehouseService_UpCount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *typeWarehouseServiceClient) DownCount(ctx context.Context, in *DownCountTypeInWarehouseReq, opts ...grpc.CallOption) (*DownCountTypeInWarehouseRes, error) {
+func (c *typeInWarehouseServiceClient) DownCount(ctx context.Context, in *DownCountTypeInWarehouseReq, opts ...grpc.CallOption) (*DownCountTypeInWarehouseRes, error) {
 	out := new(DownCountTypeInWarehouseRes)
-	err := c.cc.Invoke(ctx, TypeWarehouseService_DownCount_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TypeInWarehouseService_DownCount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TypeWarehouseServiceServer is the server API for TypeWarehouseService service.
-// All implementations must embed UnimplementedTypeWarehouseServiceServer
+// TypeInWarehouseServiceServer is the server API for TypeInWarehouseService service.
+// All implementations must embed UnimplementedTypeInWarehouseServiceServer
 // for forward compatibility
-type TypeWarehouseServiceServer interface {
+type TypeInWarehouseServiceServer interface {
 	Insert(context.Context, *InsertTypeInWarehouseReq) (*InsertTypeInWarehouseRes, error)
 	Update(context.Context, *UpdateTypeInWarehouseReq) (*UpdateTypeInWarehouseRes, error)
 	UpCount(context.Context, *UpCountTypeInWarehouseReq) (*UpCountTypeInWarehouseRes, error)
 	DownCount(context.Context, *DownCountTypeInWarehouseReq) (*DownCountTypeInWarehouseRes, error)
-	mustEmbedUnimplementedTypeWarehouseServiceServer()
+	mustEmbedUnimplementedTypeInWarehouseServiceServer()
 }
 
-// UnimplementedTypeWarehouseServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedTypeWarehouseServiceServer struct {
+// UnimplementedTypeInWarehouseServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedTypeInWarehouseServiceServer struct {
 }
 
-func (UnimplementedTypeWarehouseServiceServer) Insert(context.Context, *InsertTypeInWarehouseReq) (*InsertTypeInWarehouseRes, error) {
+func (UnimplementedTypeInWarehouseServiceServer) Insert(context.Context, *InsertTypeInWarehouseReq) (*InsertTypeInWarehouseRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Insert not implemented")
 }
-func (UnimplementedTypeWarehouseServiceServer) Update(context.Context, *UpdateTypeInWarehouseReq) (*UpdateTypeInWarehouseRes, error) {
+func (UnimplementedTypeInWarehouseServiceServer) Update(context.Context, *UpdateTypeInWarehouseReq) (*UpdateTypeInWarehouseRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedTypeWarehouseServiceServer) UpCount(context.Context, *UpCountTypeInWarehouseReq) (*UpCountTypeInWarehouseRes, error) {
+func (UnimplementedTypeInWarehouseServiceServer) UpCount(context.Context, *UpCountTypeInWarehouseReq) (*UpCountTypeInWarehouseRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpCount not implemented")
 }
-func (UnimplementedTypeWarehouseServiceServer) DownCount(context.Context, *DownCountTypeInWarehouseReq) (*DownCountTypeInWarehouseRes, error) {
+func (UnimplementedTypeInWarehouseServiceServer) DownCount(context.Context, *DownCountTypeInWarehouseReq) (*DownCountTypeInWarehouseRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DownCount not implemented")
 }
-func (UnimplementedTypeWarehouseServiceServer) mustEmbedUnimplementedTypeWarehouseServiceServer() {}
+func (UnimplementedTypeInWarehouseServiceServer) mustEmbedUnimplementedTypeInWarehouseServiceServer() {
+}
 
-// UnsafeTypeWarehouseServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TypeWarehouseServiceServer will
+// UnsafeTypeInWarehouseServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TypeInWarehouseServiceServer will
 // result in compilation errors.
-type UnsafeTypeWarehouseServiceServer interface {
-	mustEmbedUnimplementedTypeWarehouseServiceServer()
+type UnsafeTypeInWarehouseServiceServer interface {
+	mustEmbedUnimplementedTypeInWarehouseServiceServer()
 }
 
-func RegisterTypeWarehouseServiceServer(s grpc.ServiceRegistrar, srv TypeWarehouseServiceServer) {
-	s.RegisterService(&TypeWarehouseService_ServiceDesc, srv)
+func RegisterTypeInWarehouseServiceServer(s grpc.ServiceRegistrar, srv TypeInWarehouseServiceServer) {
+	s.RegisterService(&TypeInWarehouseService_ServiceDesc, srv)
 }
 
-func _TypeWarehouseService_Insert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TypeInWarehouseService_Insert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InsertTypeInWarehouseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TypeWarehouseServiceServer).Insert(ctx, in)
+		return srv.(TypeInWarehouseServiceServer).Insert(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TypeWarehouseService_Insert_FullMethodName,
+		FullMethod: TypeInWarehouseService_Insert_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TypeWarehouseServiceServer).Insert(ctx, req.(*InsertTypeInWarehouseReq))
+		return srv.(TypeInWarehouseServiceServer).Insert(ctx, req.(*InsertTypeInWarehouseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TypeWarehouseService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TypeInWarehouseService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTypeInWarehouseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TypeWarehouseServiceServer).Update(ctx, in)
+		return srv.(TypeInWarehouseServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TypeWarehouseService_Update_FullMethodName,
+		FullMethod: TypeInWarehouseService_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TypeWarehouseServiceServer).Update(ctx, req.(*UpdateTypeInWarehouseReq))
+		return srv.(TypeInWarehouseServiceServer).Update(ctx, req.(*UpdateTypeInWarehouseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TypeWarehouseService_UpCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TypeInWarehouseService_UpCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpCountTypeInWarehouseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TypeWarehouseServiceServer).UpCount(ctx, in)
+		return srv.(TypeInWarehouseServiceServer).UpCount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TypeWarehouseService_UpCount_FullMethodName,
+		FullMethod: TypeInWarehouseService_UpCount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TypeWarehouseServiceServer).UpCount(ctx, req.(*UpCountTypeInWarehouseReq))
+		return srv.(TypeInWarehouseServiceServer).UpCount(ctx, req.(*UpCountTypeInWarehouseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TypeWarehouseService_DownCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TypeInWarehouseService_DownCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DownCountTypeInWarehouseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TypeWarehouseServiceServer).DownCount(ctx, in)
+		return srv.(TypeInWarehouseServiceServer).DownCount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TypeWarehouseService_DownCount_FullMethodName,
+		FullMethod: TypeInWarehouseService_DownCount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TypeWarehouseServiceServer).DownCount(ctx, req.(*DownCountTypeInWarehouseReq))
+		return srv.(TypeInWarehouseServiceServer).DownCount(ctx, req.(*DownCountTypeInWarehouseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TypeWarehouseService_ServiceDesc is the grpc.ServiceDesc for TypeWarehouseService service.
+// TypeInWarehouseService_ServiceDesc is the grpc.ServiceDesc for TypeInWarehouseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TypeWarehouseService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.TypeWarehouseService",
-	HandlerType: (*TypeWarehouseServiceServer)(nil),
+var TypeInWarehouseService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.TypeInWarehouseService",
+	HandlerType: (*TypeInWarehouseServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Insert",
-			Handler:    _TypeWarehouseService_Insert_Handler,
+			Handler:    _TypeInWarehouseService_Insert_Handler,
 		},
 		{
 			MethodName: "Update",
-			Handler:    _TypeWarehouseService_Update_Handler,
+			Handler:    _TypeInWarehouseService_Update_Handler,
 		},
 		{
 			MethodName: "UpCount",
-			Handler:    _TypeWarehouseService_UpCount_Handler,
+			Handler:    _TypeInWarehouseService_UpCount_Handler,
 		},
 		{
 			MethodName: "DownCount",
-			Handler:    _TypeWarehouseService_DownCount_Handler,
+			Handler:    _TypeInWarehouseService_DownCount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

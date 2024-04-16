@@ -27,6 +27,7 @@ func connectPostgresql(migrate bool) error {
 	if migrate {
 		errMigrate := db.AutoMigrate(
 			&model.Order{},
+			&model.GroupOrder{},
 		)
 		if errMigrate != nil {
 			return errMigrate

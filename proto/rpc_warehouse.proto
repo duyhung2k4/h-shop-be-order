@@ -26,6 +26,7 @@ message UpdateWarehouseRes {
 
 message UpCountWarehouseReq {
     uint64 id = 1;
+    uint64 amount = 2;
 }
 message UpCountWarehouseRes {
     uint64 id = 1;
@@ -35,6 +36,7 @@ message UpCountWarehouseRes {
 
 message DownCountWarehouseReq {
     uint64 id = 1;
+    uint64 amount = 2;
 }
 message DownCountWarehouseRes {
     uint64 id = 1;
@@ -72,6 +74,7 @@ message UpdateTypeInWarehouseRes {
   
 message UpCountTypeInWarehouseReq {
     uint64 id = 1;
+    uint64 amount = 2;
 }
 message UpCountTypeInWarehouseRes {
     uint64 id = 1;
@@ -81,6 +84,7 @@ message UpCountTypeInWarehouseRes {
   
 message DownCountTypeInWarehouseReq {
     uint64 id = 1;
+    uint64 amount = 2;
 }
 message DownCountTypeInWarehouseRes {
     uint64 id = 1;
@@ -88,9 +92,27 @@ message DownCountTypeInWarehouseRes {
     uint64 count = 3;
 }
 
-service TypeWarehouseService {
+service TypeInWarehouseService {
     rpc Insert(InsertTypeInWarehouseReq) returns (InsertTypeInWarehouseRes) {}
     rpc Update(UpdateTypeInWarehouseReq) returns (UpdateTypeInWarehouseRes) {}
     rpc UpCount(UpCountTypeInWarehouseReq) returns (UpCountTypeInWarehouseRes) {}
     rpc DownCount(DownCountTypeInWarehouseReq) returns (DownCountTypeInWarehouseRes) {}
+}
+
+message ListOrder {
+    uint64 productId = 1;
+    uint64 warehouseId = 2;
+    uint64 typeInWarehouseId = 3;
+}
+message CountPriceOrderReq {
+    uint64 groupOrderId = 1;
+    repeated ListOrder orders = 2;
+}
+message CountPriceOrderRes {
+    uint64 groupOrderId = 1;
+    float price = 2;
+}
+
+service CountPriceService {
+    rpc CountPriceOrder(CountPriceOrderReq) returns (CountPriceOrderRes) {}
 }
