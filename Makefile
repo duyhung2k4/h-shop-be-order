@@ -16,3 +16,13 @@ gen_key:
 		-keyout keys/server-order/private.pem \
 		-out keys/server-order/public.pem \
 		-config keys/server-order/san.cfg
+
+test_request_order:
+	ab \
+    -n 1000 \
+    -c 100 \
+    -T application/json \
+    -p test/order.json \
+    -m POST \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhYmEwMzk4MjYyMTI0QGdtYWlsLmNvbSIsImV4cCI6MTcxMzM4NTMwMiwicHJvZmlsZV9pZCI6Nywicm9sZSI6InVzZXIiLCJzdWIiOiIxMTc5OTY0MjMxODM5MDc1NzAyNTIiLCJ1dWlkIjoiOWU3ZWY5NWQtZGNhMS00ZTJkLWI1ODktYjYyMjJmM2ZmMDAzIn0.Gc0nuMuxfDU-deS2Y1To0icsJ5C9RkaayLRjhCCW4EU" \
+    http://localhost:18886/order/api/v1/protected/order

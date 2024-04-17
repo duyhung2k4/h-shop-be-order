@@ -1,0 +1,11 @@
+{
+    "address": "th",
+    "typePay": "cash",
+    "orders": [
+        {
+            "productId": "661f9d76c802bf9e9a9d35ad",
+            "warehouseId": 2,
+            "amount": 1
+        }
+    ]
+}
