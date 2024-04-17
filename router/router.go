@@ -2,6 +2,7 @@ package router
 
 import (
 	"app/config"
+	"app/controller"
 	"log"
 	"net/http"
 
@@ -33,17 +34,21 @@ func Router() http.Handler {
 
 	middlewares := middlewares.NewMiddlewares()
 
-	// accessController := controller.NewAccess()
+	orderController := controller.NewOrderController()
 
-	app.Route("/account/api/v1", func(r chi.Router) {
+	app.Route("/order/api/v1", func(r chi.Router) {
 		r.Route("/protected", func(protected chi.Router) {
 			protected.Use(jwtauth.Verifier(config.GetJWT()))
 			protected.Use(jwtauth.Authenticator(config.GetJWT()))
 			protected.Use(middlewares.ValidateExpAccessToken())
+
+			protected.Route("/order", func(order chi.Router) {
+				order.Post("/", orderController.Order)
+			})
 		})
 	})
 
-	log.Println("Sevice h-shop-be-account starting success!")
+	log.Println("Sevice h-shop-be-order starting success!")
 
 	return app
 }

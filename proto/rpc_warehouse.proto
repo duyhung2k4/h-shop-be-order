@@ -99,14 +99,15 @@ service TypeInWarehouseService {
     rpc DownCount(DownCountTypeInWarehouseReq) returns (DownCountTypeInWarehouseRes) {}
 }
 
-message ListOrder {
-    uint64 productId = 1;
+message Order {
+    string productId = 1;
     uint64 warehouseId = 2;
     uint64 typeInWarehouseId = 3;
+    uint64 amount = 4;
 }
 message CountPriceOrderReq {
     uint64 groupOrderId = 1;
-    repeated ListOrder orders = 2;
+    repeated Order orders = 2;
 }
 message CountPriceOrderRes {
     uint64 groupOrderId = 1;

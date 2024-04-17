@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "grpc/proto";
+
+import "proto/model.proto";
+
+message GetProductByListIdReq {
+    repeated string productIds = 1;
+}
+
+message GetProductByListIdRes {
+    repeated Product products = 1;
+}
+
+service ProductService {
+    rpc GetProductByListId(GetProductByListIdReq) returns (GetProductByListIdRes) {}
+}

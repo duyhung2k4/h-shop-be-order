@@ -420,3 +420,93 @@ var TypeInWarehouseService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/rpc_warehouse.proto",
 }
+
+const (
+	CountPriceService_CountPriceOrder_FullMethodName = "/proto.CountPriceService/CountPriceOrder"
+)
+
+// CountPriceServiceClient is the client API for CountPriceService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type CountPriceServiceClient interface {
+	CountPriceOrder(ctx context.Context, in *CountPriceOrderReq, opts ...grpc.CallOption) (*CountPriceOrderRes, error)
+}
+
+type countPriceServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCountPriceServiceClient(cc grpc.ClientConnInterface) CountPriceServiceClient {
+	return &countPriceServiceClient{cc}
+}
+
+func (c *countPriceServiceClient) CountPriceOrder(ctx context.Context, in *CountPriceOrderReq, opts ...grpc.CallOption) (*CountPriceOrderRes, error) {
+	out := new(CountPriceOrderRes)
+	err := c.cc.Invoke(ctx, CountPriceService_CountPriceOrder_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CountPriceServiceServer is the server API for CountPriceService service.
+// All implementations must embed UnimplementedCountPriceServiceServer
+// for forward compatibility
+type CountPriceServiceServer interface {
+	CountPriceOrder(context.Context, *CountPriceOrderReq) (*CountPriceOrderRes, error)
+	mustEmbedUnimplementedCountPriceServiceServer()
+}
+
+// UnimplementedCountPriceServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCountPriceServiceServer struct {
+}
+
+func (UnimplementedCountPriceServiceServer) CountPriceOrder(context.Context, *CountPriceOrderReq) (*CountPriceOrderRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CountPriceOrder not implemented")
+}
+func (UnimplementedCountPriceServiceServer) mustEmbedUnimplementedCountPriceServiceServer() {}
+
+// UnsafeCountPriceServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CountPriceServiceServer will
+// result in compilation errors.
+type UnsafeCountPriceServiceServer interface {
+	mustEmbedUnimplementedCountPriceServiceServer()
+}
+
+func RegisterCountPriceServiceServer(s grpc.ServiceRegistrar, srv CountPriceServiceServer) {
+	s.RegisterService(&CountPriceService_ServiceDesc, srv)
+}
+
+func _CountPriceService_CountPriceOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CountPriceOrderReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CountPriceServiceServer).CountPriceOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CountPriceService_CountPriceOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CountPriceServiceServer).CountPriceOrder(ctx, req.(*CountPriceOrderReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// CountPriceService_ServiceDesc is the grpc.ServiceDesc for CountPriceService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var CountPriceService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.CountPriceService",
+	HandlerType: (*CountPriceServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CountPriceOrder",
+			Handler:    _CountPriceService_CountPriceOrder_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/rpc_warehouse.proto",
+}

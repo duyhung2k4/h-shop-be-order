@@ -31,6 +31,7 @@ func (s *orderService) Order(payload []OrderPayload) ([]model.Order, error) {
 			WarehouseId:       item.WarehouseId,
 			GroupOrderId:      item.GroupOrderId,
 			TypeInWarehouseId: item.TypeInWarehouseId,
+			Amount:            item.Amount,
 		}
 		newOrders = append(newOrders, *order)
 	}
@@ -76,20 +77,23 @@ func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 
 func NewOrderService() OrderService {
 	return &orderService{
-		db: config.GetDB(),
+		db:                         config.GetDB(),
+		grpcWarehouseService:       proto.NewWarehouseServiceClient(config.GetConnWarehouseGRPC()),
+		grpcTypeInWarehouseService: proto.NewTypeInWarehouseServiceClient(config.GetConnWarehouseGRPC()),
 	}
 }
 
 type OrderPayload struct {
 	ProfileId         uint
-	ProductId         uint
+	ProductId         string
 	WarehouseId       uint
 	GroupOrderId      uint
 	TypeInWarehouseId *uint
+	Amount            int
 }
 
 type CheckcountPayload struct {
-	ProductId         uint
+	ProductId         string
 	WarehouseId       uint
 	TypeInWarehouseId *uint
 	GroupOrderId      uint
