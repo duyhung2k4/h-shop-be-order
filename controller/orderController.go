@@ -2,8 +2,8 @@ package controller
 
 import (
 	"app/config"
+	"app/dto/request"
 	"app/grpc/proto"
-	"app/model"
 	"app/service"
 	"app/utils"
 	"context"
@@ -46,7 +46,7 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 	profileId := uint(mapDataRequest["profile_id"].(float64))
 
 	// create groupOrder
-	var groupOrder GroupOrderRequest
+	var groupOrder request.GroupOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&groupOrder); err != nil {
 		badRequest(w, r, err)
 		return
@@ -159,21 +159,4 @@ func NewOrderController() OrderController {
 		groupOrderService:          service.NewGroupOrderService(),
 		jwtUtils:                   utils.NewJwtUtils(),
 	}
-}
-
-type OrderRequest struct {
-	ProductId         string `json:"productId"`
-	WarehouseId       uint   `json:"warehouseId"`
-	TypeInWarehouseId *uint  `json:"typeWarehouseId"`
-	GroupOrderId      uint   `json:"groupOrderId"`
-	Amount            uint   `json:"amount"`
-}
-
-type GroupOrderRequest struct {
-	Address string         `json:"address"`
-	TypePay model.TYPE_PAY `json:"typePay"`
-	Orders  []OrderRequest `json:"orders"`
-}
-
-type OrderResponse struct {
 }
