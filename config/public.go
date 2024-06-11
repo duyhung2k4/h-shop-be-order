@@ -27,6 +27,10 @@ func GetConnWarehouseGRPC() *grpc.ClientConn {
 	return clientWarehouse
 }
 
+func GetConnPaymentGRPC() *grpc.ClientConn {
+	return clientPayment
+}
+
 func GetHost() string {
 	return host
 }

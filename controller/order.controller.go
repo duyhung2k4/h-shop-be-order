@@ -3,6 +3,7 @@ package controller
 import (
 	"app/config"
 	"app/dto/request"
+	"app/dto/response"
 	"app/grpc/proto"
 	"app/service"
 	"app/utils"
@@ -12,6 +13,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/go-chi/render"
 )
@@ -20,6 +22,7 @@ type orderController struct {
 	grpcWarehouseService       proto.WarehouseServiceClient
 	grpcTypeInWarehouseService proto.TypeInWarehouseServiceClient
 	countPriceService          proto.CountPriceServiceClient
+	grpcBillService            proto.BillServiceClient
 	orderService               service.OrderService
 	groupOrderService          service.GroupOrderService
 	jwtUtils                   utils.JwtUtils
@@ -51,6 +54,12 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, r, err)
 		return
 	}
+
+	if len(groupOrder.Orders) == 0 {
+		badRequest(w, r, errors.New("orders empty"))
+		return
+	}
+
 	newGroupOrder, errGroupOrderId := c.groupOrderService.CreateGroupOrder(service.PayloadCreateGroupOrder{
 		Address: groupOrder.Address,
 		TypePay: groupOrder.TypePay,
@@ -68,12 +77,13 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 			ProductId:         item.ProductId,
 			WarehouseId:       item.WarehouseId,
 			TypeInWarehouseId: item.TypeInWarehouseId,
-			GroupOrderId:      item.GroupOrderId,
+			GroupOrderId:      newGroupOrder.ID,
 			Amount:            item.Amount,
 		})
 	}
 	errCheckCount := c.orderService.CheckCount(payloadCheckCount)
 	if errCheckCount != nil {
+		// push mess delete group order
 		internalServerError(w, r, errCheckCount)
 		return
 	}
@@ -140,8 +150,30 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// push mess update total group order
+	ipAddr := strings.Join([]string{
+		r.Header.Get("x-forwarded-for"),
+		r.RemoteAddr,
+	}, ",")
+	expireDate := time.Now().Add(5 * time.Minute)
+	billResult, errCreateBill := c.grpcBillService.CreateBill(context.Background(), &proto.CreateBillReq{
+		Amount:           float32(newGroupOrder.Total),
+		ExpireDate:       expireDate.Unix(),
+		OrderDescription: groupOrder.OrderDescription,
+		OrderType:        groupOrder.OrderType,
+		IpAddr:           ipAddr,
+	})
+
+	if errCreateBill != nil {
+		internalServerError(w, r, errCreateBill)
+		return
+	}
+
 	res := Response{
-		Data:    newGroupOrder,
+		Data: response.OrderResponse{
+			GroupOrder: *newGroupOrder,
+			VnpHref:    billResult.HrefVnp,
+		},
 		Message: "OK",
 		Status:  200,
 		Error:   nil,
@@ -155,6 +187,7 @@ func NewOrderController() OrderController {
 		grpcWarehouseService:       proto.NewWarehouseServiceClient(config.GetConnWarehouseGRPC()),
 		grpcTypeInWarehouseService: proto.NewTypeInWarehouseServiceClient(config.GetConnWarehouseGRPC()),
 		countPriceService:          proto.NewCountPriceServiceClient(config.GetConnWarehouseGRPC()),
+		grpcBillService:            proto.NewBillServiceClient(config.GetConnPaymentGRPC()),
 		orderService:               service.NewOrderService(),
 		groupOrderService:          service.NewGroupOrderService(),
 		jwtUtils:                   utils.NewJwtUtils(),

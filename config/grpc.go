@@ -20,3 +20,17 @@ func connectGPRCServerWarehouse() {
 		log.Fatalln(errConn)
 	}
 }
+
+func connectGRPCServerPayment() {
+	var errConn error
+
+	creds, errKey := credentials.NewClientTLSFromFile("keys/server-payment/public.pem", "localhost")
+	if errKey != nil {
+		log.Fatalln(errKey)
+	}
+
+	clientPayment, errConn = grpc.Dial(host+":20009", grpc.WithTransportCredentials(creds))
+	if errConn != nil {
+		log.Fatalln(errConn)
+	}
+}

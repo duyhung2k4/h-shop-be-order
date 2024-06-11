@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "grpc/proto";
+
+message CreateBillReq {
+  float amount = 1;
+  string bankCode = 2;
+  string orderDescription = 3;
+  string orderType = 4;
+  string ipAddr = 5;
+  int64 expireDate = 6;
+}
+message CreateBillRes {
+  string uuidBill = 1;
+  string hrefVnp = 2;
+}
+
+service BillService {
+  rpc CreateBill(CreateBillReq) returns (CreateBillRes) {}
+}

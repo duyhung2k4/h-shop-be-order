@@ -11,7 +11,9 @@ type OrderRequest struct {
 }
 
 type GroupOrderRequest struct {
-	Address string         `json:"address"`
-	TypePay model.TYPE_PAY `json:"typePay"`
-	Orders  []OrderRequest `json:"orders"`
+	Address          string         `json:"address"`
+	TypePay          model.TYPE_PAY `json:"typePay"`
+	OrderDescription string         `json:"orderDescription"`
+	OrderType        string         `json:"orderType"`
+	Orders           []OrderRequest `json:"orders"`
 }

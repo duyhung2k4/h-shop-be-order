@@ -33,4 +33,5 @@ var (
 	jwt *jwtauth.JWTAuth
 
 	clientWarehouse *grpc.ClientConn
+	clientPayment   *grpc.ClientConn
 )
