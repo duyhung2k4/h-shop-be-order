@@ -46,6 +46,7 @@ func (s *orderService) Order(payload []OrderPayload) ([]model.Order, error) {
 func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 	var errCheckout error = nil
 	var wg sync.WaitGroup
+	var checkCountNotError []CheckcountPayload
 	for _, item := range payload {
 		wg.Add(1)
 		go func(order CheckcountPayload) {
@@ -57,6 +58,8 @@ func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 
 				if err != nil {
 					errCheckout = err
+				} else {
+					checkCountNotError = append(checkCountNotError, order)
 				}
 			} else {
 				_, err := s.grpcTypeInWarehouseService.DownCount(context.Background(), &proto.DownCountTypeInWarehouseReq{
@@ -66,13 +69,21 @@ func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 
 				if err != nil {
 					errCheckout = err
+				} else {
+					checkCountNotError = append(checkCountNotError, order)
 				}
 			}
 			wg.Done()
 		}(item)
 	}
 	wg.Wait()
-	return errCheckout
+
+	if errCheckout != nil {
+		// Push mess up count not error
+		return errCheckout
+	}
+
+	return nil
 }
 
 func NewOrderService() OrderService {
