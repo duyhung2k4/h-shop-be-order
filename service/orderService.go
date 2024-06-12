@@ -4,6 +4,7 @@ import (
 	"app/config"
 	"app/grpc/proto"
 	"app/model"
+	"app/utils"
 	"context"
 	"sync"
 
@@ -14,6 +15,7 @@ type orderService struct {
 	db                         *gorm.DB
 	grpcWarehouseService       proto.WarehouseServiceClient
 	grpcTypeInWarehouseService proto.TypeInWarehouseServiceClient
+	queueProductUtils          utils.QueueProductUtils
 }
 
 type OrderService interface {
@@ -79,7 +81,7 @@ func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 	wg.Wait()
 
 	if errCheckout != nil {
-		// Push mess up count not error
+		s.queueProductUtils.PushMessInQueue(checkCountNotError, string(model.UP_COUNT_WAREHOUSE))
 		return errCheckout
 	}
 
@@ -91,6 +93,7 @@ func NewOrderService() OrderService {
 		db:                         config.GetDB(),
 		grpcWarehouseService:       proto.NewWarehouseServiceClient(config.GetConnWarehouseGRPC()),
 		grpcTypeInWarehouseService: proto.NewTypeInWarehouseServiceClient(config.GetConnWarehouseGRPC()),
+		queueProductUtils:          utils.NewQueueProductService(),
 	}
 }
 

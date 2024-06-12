@@ -22,6 +22,7 @@ func loadEnv() error {
 	dbUser = os.Getenv(DB_USER)
 	urlRedis = os.Getenv(URL_REDIS)
 	host = os.Getenv(HOST)
+	urlRabbitMq = os.Getenv(URL_RABBIT_MQ)
 
 	return nil
 }

@@ -23,4 +23,5 @@ func init() {
 	connectRedis()
 	connectGPRCServerWarehouse()
 	connectGRPCServerPayment()
+	connectRabbitMQ()
 }
