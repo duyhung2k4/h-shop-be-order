@@ -55,6 +55,11 @@ service WarehouseService {
 // Type Warehouse
 message InsertTypeInWarehouseReq {
     string productId = 1;
+    uint64 warehouseId = 2;
+    string hasTag = 3;
+    string name = 4;
+    float price = 5;
+    uint64 count = 6;
 }
 message InsertTypeInWarehouseRes {
     uint64 id = 1;
