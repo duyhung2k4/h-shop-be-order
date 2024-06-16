@@ -120,12 +120,16 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 		orders := []*proto.Order{}
 
 		for _, item := range groupOrder.Orders {
-			orders = append(orders, &proto.Order{
-				ProductId:         item.ProductId,
-				Amount:            uint64(item.Amount),
-				WarehouseId:       uint64(item.WarehouseId),
-				TypeInWarehouseId: uint64(*item.TypeInWarehouseId),
-			})
+			order := proto.Order{
+				ProductId:   item.ProductId,
+				Amount:      uint64(item.Amount),
+				WarehouseId: uint64(item.WarehouseId),
+			}
+
+			if item.TypeInWarehouseId != nil {
+				order.TypeInWarehouseId = uint64(*item.TypeInWarehouseId)
+			}
+			orders = append(orders, &order)
 		}
 
 		res, err := c.countPriceService.CountPriceOrder(context.Background(), &proto.CountPriceOrderReq{
