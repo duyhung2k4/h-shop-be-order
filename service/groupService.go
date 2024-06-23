@@ -65,7 +65,11 @@ func (s *groupOrderService) ChangeStatusOrder(orderId string, status string) err
 func (s *groupOrderService) GetPurchaseOrder(profileId uint) ([]*model.GroupOrder, error) {
 	var data []*model.GroupOrder
 
-	if err := s.db.Debug().Model(&model.GroupOrder{}).Where("profile_id = ? AND paid = ?", profileId, true).Find(&data).Error; err != nil {
+	if err := s.db.Debug().
+		Model(&model.GroupOrder{}).
+		Preload("Orders").
+		Where("profile_id = ? AND paid = ?", profileId, true).
+		Find(&data).Error; err != nil {
 		return nil, err
 	}
 
