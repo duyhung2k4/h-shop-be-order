@@ -17,3 +17,8 @@ type GroupOrderRequest struct {
 	OrderType        string         `json:"orderType"`
 	Orders           []OrderRequest `json:"orders"`
 }
+
+type ChangeStatusOrderRequest struct {
+	OrderId string `json:"orderId"`
+	Status  string `json:"status"`
+}

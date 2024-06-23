@@ -30,6 +30,8 @@ type orderController struct {
 
 type OrderController interface {
 	Order(w http.ResponseWriter, r *http.Request)
+	ChangeStatusOrder(w http.ResponseWriter, r *http.Request)
+	GetPurchaseOrder(w http.ResponseWriter, r *http.Request)
 }
 
 func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +65,7 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 	newGroupOrder, errGroupOrderId := c.groupOrderService.CreateGroupOrder(service.PayloadCreateGroupOrder{
 		Address: groupOrder.Address,
 		TypePay: groupOrder.TypePay,
-	})
+	}, profileId)
 	if errGroupOrderId != nil {
 		internalServerError(w, r, errGroupOrderId)
 		return
@@ -174,11 +176,72 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, errUpdateGroupOrder := c.groupOrderService.UpdateGroupOrder(newGroupOrder.ID, billResult.UuidBill, newGroupOrder.Total)
+	if errUpdateGroupOrder != nil {
+		internalServerError(w, r, errUpdateGroupOrder)
+		return
+	}
+
 	res := Response{
 		Data: response.OrderResponse{
 			GroupOrder: *newGroupOrder,
 			VnpHref:    billResult.HrefVnp,
 		},
+		Message: "OK",
+		Status:  200,
+		Error:   nil,
+	}
+
+	render.JSON(w, r, res)
+}
+
+func (c *orderController) ChangeStatusOrder(w http.ResponseWriter, r *http.Request) {
+	var payload request.ChangeStatusOrderRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		badRequest(w, r, err)
+		return
+	}
+
+	if err := c.groupOrderService.ChangeStatusOrder(payload.OrderId, payload.Status); err != nil {
+		internalServerError(w, r, err)
+		return
+	}
+
+	res := Response{
+		Data:    nil,
+		Message: "OK",
+		Status:  200,
+		Error:   nil,
+	}
+
+	render.JSON(w, r, res)
+}
+
+func (c *orderController) GetPurchaseOrder(w http.ResponseWriter, r *http.Request) {
+	tokenString := strings.Split(r.Header.Get("Authorization"), " ")[1]
+	mapDataRequest, errMapData := c.jwtUtils.JwtDecode(tokenString)
+
+	if errMapData != nil {
+		internalServerError(w, r, errMapData)
+		return
+	}
+
+	// profileId
+	if mapDataRequest["profile_id"] == nil {
+		handleError(w, r, errors.New("not permission"), 401)
+		return
+	}
+	profileId := uint(mapDataRequest["profile_id"].(float64))
+
+	data, err := c.groupOrderService.GetPurchaseOrder(profileId)
+	if err != nil {
+		internalServerError(w, r, err)
+		return
+	}
+
+	res := Response{
+		Data:    data,
 		Message: "OK",
 		Status:  200,
 		Error:   nil,

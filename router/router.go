@@ -44,6 +44,8 @@ func Router() http.Handler {
 
 			protected.Route("/order", func(order chi.Router) {
 				order.Post("/", orderController.Order)
+				order.Post("/change-status", orderController.ChangeStatusOrder)
+				order.Get("/purchase-order", orderController.GetPurchaseOrder)
 			})
 		})
 	})

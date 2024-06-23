@@ -11,5 +11,5 @@ type Order struct {
 	ProfileId         uint   `json:"profileId"`
 	GroupOrderId      uint   `json:"groupOrderId"`
 
-	GroupOrder GroupOrder `json:"GroupOrder" gorm:"foreignKey:GroupOrderId"`
+	GroupOrder GroupOrder `json:"groupOrder" gorm:"foreignKey:GroupOrderId"`
 }

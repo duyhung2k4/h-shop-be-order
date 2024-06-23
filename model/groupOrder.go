@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type GroupOrder struct {
 	gorm.Model
+	ProfileId uint     `json:"profileId"`
 	Address   string   `json:"address"`
 	TypePay   TYPE_PAY `json:"typePay"`
 	Paid      bool     `json:"paid"`
