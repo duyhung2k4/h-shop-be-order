@@ -10,6 +10,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"sync"
@@ -37,6 +38,8 @@ type OrderController interface {
 func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 	tokenString := strings.Split(r.Header.Get("Authorization"), " ")[1]
 	mapDataRequest, errMapData := c.jwtUtils.JwtDecode(tokenString)
+
+	log.Println(tokenString)
 
 	if errMapData != nil {
 		internalServerError(w, r, errMapData)
