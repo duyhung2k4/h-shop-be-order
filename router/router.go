@@ -43,9 +43,11 @@ func Router() http.Handler {
 			protected.Use(middlewares.ValidateExpAccessToken())
 
 			protected.Route("/order", func(order chi.Router) {
+				order.Get("/purchase-order", orderController.GetPurchaseOrder)
+				order.Get("/admin-get-order", orderController.AdminGetOrder)
 				order.Post("/", orderController.Order)
 				order.Post("/change-status", orderController.ChangeStatusOrder)
-				order.Get("/purchase-order", orderController.GetPurchaseOrder)
+				order.Post("/change-status-v2", orderController.ChangeStatusOrderV2)
 			})
 		})
 	})

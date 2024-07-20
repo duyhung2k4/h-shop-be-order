@@ -32,7 +32,9 @@ type orderController struct {
 type OrderController interface {
 	Order(w http.ResponseWriter, r *http.Request)
 	ChangeStatusOrder(w http.ResponseWriter, r *http.Request)
+	ChangeStatusOrderV2(w http.ResponseWriter, r *http.Request)
 	GetPurchaseOrder(w http.ResponseWriter, r *http.Request)
+	AdminGetOrder(w http.ResponseWriter, r *http.Request)
 }
 
 func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
@@ -103,11 +105,14 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 		for _, item := range groupOrder.Orders {
 			order := service.OrderPayload{
 				ProfileId:         profileId,
+				ShopId:            item.ShopId,
 				ProductId:         item.ProductId,
 				WarehouseId:       item.WarehouseId,
 				GroupOrderId:      item.GroupOrderId,
 				TypeInWarehouseId: item.TypeInWarehouseId,
 				Amount:            int(item.Amount),
+				Status:            "pending",
+				Total:             item.Total,
 			}
 			orders = append(orders, order)
 		}
@@ -157,6 +162,18 @@ func (c *orderController) Order(w http.ResponseWriter, r *http.Request) {
 
 	if errHandle != nil {
 		internalServerError(w, r, errHandle)
+		return
+	}
+
+	if groupOrder.TypePay == "offline" {
+		res := Response{
+			Data:    newGroupOrder,
+			Message: "OK",
+			Status:  200,
+			Error:   nil,
+		}
+
+		render.JSON(w, r, res)
 		return
 	}
 
@@ -247,6 +264,62 @@ func (c *orderController) GetPurchaseOrder(w http.ResponseWriter, r *http.Reques
 		Data:    data,
 		Message: "OK",
 		Status:  200,
+		Error:   nil,
+	}
+
+	render.JSON(w, r, res)
+}
+
+func (c *orderController) AdminGetOrder(w http.ResponseWriter, r *http.Request) {
+	tokenString := strings.Split(r.Header.Get("Authorization"), " ")[1]
+	mapDataRequest, errMapData := c.jwtUtils.JwtDecode(tokenString)
+
+	if errMapData != nil {
+		internalServerError(w, r, errMapData)
+		return
+	}
+
+	// profileId
+	if mapDataRequest["profile_id"] == nil {
+		handleError(w, r, errors.New("not permission"), 401)
+		return
+	}
+	profileId := uint(mapDataRequest["profile_id"].(float64))
+
+	orders, errOrder := c.orderService.AdminGetOrder(uint64(profileId))
+	if errOrder != nil {
+		internalServerError(w, r, errOrder)
+		return
+	}
+
+	res := Response{
+		Data:    orders,
+		Message: "OK",
+		Status:  200,
+		Error:   nil,
+	}
+
+	render.JSON(w, r, res)
+}
+
+func (c *orderController) ChangeStatusOrderV2(w http.ResponseWriter, r *http.Request) {
+	var payload request.ChangeStatusOrderV2Request
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		badRequest(w, r, err)
+		return
+	}
+
+	err := c.orderService.ChangeStatusOrderV2(payload)
+
+	if err != nil {
+		internalServerError(w, r, err)
+		return
+	}
+
+	res := Response{
+		Data:    nil,
+		Status:  200,
+		Message: "OK",
 		Error:   nil,
 	}
 

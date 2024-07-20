@@ -2,6 +2,7 @@ package service
 
 import (
 	"app/config"
+	"app/dto/request"
 	"app/grpc/proto"
 	"app/model"
 	"app/utils"
@@ -19,8 +20,24 @@ type orderService struct {
 }
 
 type OrderService interface {
+	AdminGetOrder(profileId uint64) ([]*model.Order, error)
 	Order(payload []OrderPayload) ([]model.Order, error)
 	CheckCount(payload []CheckcountPayload) error
+	ChangeStatusOrderV2(payload request.ChangeStatusOrderV2Request) error
+}
+
+func (s *orderService) AdminGetOrder(profileId uint64) ([]*model.Order, error) {
+	var orders []*model.Order
+
+	if err := s.db.
+		Model(&model.Order{}).
+		Preload("GroupOrder").
+		Where("shop_id = ?", profileId).
+		Find(&orders).Error; err != nil {
+		return nil, err
+	}
+
+	return orders, nil
 }
 
 func (s *orderService) Order(payload []OrderPayload) ([]model.Order, error) {
@@ -29,11 +46,14 @@ func (s *orderService) Order(payload []OrderPayload) ([]model.Order, error) {
 	for _, item := range payload {
 		order := &model.Order{
 			ProfileId:         item.ProfileId,
+			ShopId:            item.ShopId,
 			ProductId:         item.ProductId,
 			WarehouseId:       item.WarehouseId,
 			GroupOrderId:      item.GroupOrderId,
 			TypeInWarehouseId: item.TypeInWarehouseId,
 			Amount:            item.Amount,
+			Status:            item.Status,
+			Total:             item.Total,
 		}
 		newOrders = append(newOrders, *order)
 	}
@@ -88,6 +108,38 @@ func (s *orderService) CheckCount(payload []CheckcountPayload) error {
 	return nil
 }
 
+func (s *orderService) ChangeStatusOrderV2(payload request.ChangeStatusOrderV2Request) error {
+	var newOrder *model.Order = &model.Order{
+		Status: payload.Status,
+		Paid:   payload.Paid,
+	}
+
+	if err := s.db.Model(&model.Order{}).Where("id = ?", payload.Id).Updates(&newOrder).Error; err != nil {
+		return err
+	}
+
+	if payload.Status == "accept" {
+		return nil
+	}
+
+	var errRollback error
+	if payload.TypeInWarehouseId != nil {
+		_, err := s.grpcTypeInWarehouseService.UpCount(context.Background(), &proto.UpCountTypeInWarehouseReq{
+			Id:     uint64(*payload.TypeInWarehouseId),
+			Amount: uint64(payload.Amount),
+		})
+		errRollback = err
+	} else {
+		_, err := s.grpcWarehouseService.UpCount(context.Background(), &proto.UpCountWarehouseReq{
+			Id:     uint64(payload.WarehouseId),
+			Amount: uint64(payload.Amount),
+		})
+		errRollback = err
+	}
+
+	return errRollback
+}
+
 func NewOrderService() OrderService {
 	return &orderService{
 		db:                         config.GetDB(),
@@ -98,12 +150,15 @@ func NewOrderService() OrderService {
 }
 
 type OrderPayload struct {
+	ShopId            uint64
 	ProfileId         uint
 	ProductId         string
 	WarehouseId       uint
 	GroupOrderId      uint
 	TypeInWarehouseId *uint
 	Amount            int
+	Status            string
+	Total             float64
 }
 
 type CheckcountPayload struct {

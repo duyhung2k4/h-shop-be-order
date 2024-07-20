@@ -3,11 +3,13 @@ package request
 import "app/model"
 
 type OrderRequest struct {
-	ProductId         string `json:"productId"`
-	WarehouseId       uint   `json:"warehouseId"`
-	TypeInWarehouseId *uint  `json:"typeWarehouseId"`
-	GroupOrderId      uint   `json:"groupOrderId"`
-	Amount            uint   `json:"amount"`
+	ShopId            uint64  `json:"shopId"`
+	ProductId         string  `json:"productId"`
+	WarehouseId       uint    `json:"warehouseId"`
+	TypeInWarehouseId *uint   `json:"typeWarehouseId"`
+	GroupOrderId      uint    `json:"groupOrderId"`
+	Total             float64 `json:"total"`
+	Amount            uint    `json:"amount"`
 }
 
 type GroupOrderRequest struct {
@@ -21,4 +23,13 @@ type GroupOrderRequest struct {
 type ChangeStatusOrderRequest struct {
 	OrderId string `json:"orderId"`
 	Status  string `json:"status"`
+}
+
+type ChangeStatusOrderV2Request struct {
+	Id                uint64 `json:"id"`
+	Status            string `json:"status"`
+	Paid              bool   `json:"paid"`
+	Amount            int    `json:"amount"`
+	WarehouseId       uint   `json:"warehouseId"`
+	TypeInWarehouseId *uint  `json:"typeWarehouseId"`
 }

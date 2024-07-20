@@ -10,6 +10,7 @@ type GroupOrder struct {
 	Paid      bool     `json:"paid"`
 	Total     float64  `json:"total"`
 	VnpTxnRef *string  `json:"vnp_TxnRef"`
+	Status    string   `json:"status"`
 
 	Orders []Order `json:"orders" gorm:"foreignKey:GroupOrderId"`
 }

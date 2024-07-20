@@ -36,6 +36,7 @@ func (s *groupOrderService) UpdateGroupOrder(id uint, orderId string, total floa
 	var groupOrder = model.GroupOrder{
 		VnpTxnRef: &orderId,
 		Total:     total,
+		TypePay:   "online",
 	}
 
 	if err := s.db.Model(&model.GroupOrder{}).Where("id = ?", id).Updates(&groupOrder).Error; err != nil {
@@ -55,8 +56,18 @@ func (s *groupOrderService) ChangeStatusOrder(orderId string, status string) err
 		groupOrder.Paid = false
 	}
 
-	if err := s.db.Model(&model.GroupOrder{}).Where("vnp_txn_ref = ? AND paid = ?", orderId, false).Updates(&groupOrder).Error; err != nil {
-		return nil
+	if err := s.db.
+		Model(&model.GroupOrder{}).
+		Where("vnp_txn_ref = ? AND paid = ?", orderId, false).
+		Updates(&groupOrder).Error; err != nil {
+		return err
+	}
+
+	if err := s.db.
+		Model(&model.Order{}).
+		Where("group_order_id = ?", groupOrder.ID).
+		Updates(&model.Order{Paid: groupOrder.Paid}).Error; err != nil {
+		return err
 	}
 
 	return nil
